@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar" th:fragment="nav">
+    <div class="logo">RESTAURANTE</div>
+
+    <a href="/admin/dashboard" class="active">INICIO</a>
+    <a href="/usuarios">USUARIOS</a>
+    <a href="/eventos">EVENTOS</a>
+    <a href="/reservaciones">RESERVACIONES</a>
+    <a href="/pedidos">PEDIDOS</a>
+    <a href="/facturas">FACTURAS</a>
+
+    <div class="user-menu">
+        Admin ▾ &nbsp;
+        <a href="/logout">Salir</a>
+    </div>
+</nav>
+
+
+</body>
+</html>

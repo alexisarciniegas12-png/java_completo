@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
+
+    <style>
+        :root {
+            --primary-color: #FBC02D;
+            --primary-hover: #FFD54F;
+            --background-body: #F5F5F5;
+            --text-color: #424242;
+            --text-light: #757575;
+            --nav-bg: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --danger-color: #E53935;
+            --danger-hover: #C62828;
+        }
+
+        body {
+            background-color: var(--background-body);
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .navbar-custom {
+            background-color: var(--nav-bg);
+            border-bottom: 3px solid var(--primary-color);
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-brand { color: var(--text-color) !important; font-weight: 700; }
+
+        .navbar-custom .nav-link {
+            color: var(--text-light); font-weight: 500; margin-right: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .navbar-custom .nav-link.active { color: var(--primary-color); font-weight: 600; }
+
+        .logout-link { color: var(--danger-color) !important; font-weight: bold; }
+
+        .container { max-width: 1200px; padding-top: 30px; }
+
+        h2 {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .btn-new {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            padding: 8px 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-new:hover { background-color: var(--primary-hover); }
+
+        /* 🔴 BOTÓN ROJO PARA PDF */
+        .btn-pdf {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-pdf:hover { background-color: var(--danger-hover); }
+
+        .table { margin-top: 16px; }
+        .table thead tr { background-color: var(--background-body); }
+
+        .action-btns-container { display: flex; gap: 8px; }
+
+        .btn-icon-action {
+            width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 4px;
+        }
+
+        .btn-edit {
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        .btn-edit:hover { background-color: var(--primary-hover); }
+
+        .btn-delete {
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+        .btn-delete:hover { background-color: var(--danger-color); color: white; }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid px-5">
+
+        <a class="navbar-brand me-5" th:href="@{/admin/dashboard}">
+            PARRILLA EXPRESS
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarNavSimple">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}">INICIO</a></li>
+
+                <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}">USUARIOS</a></li>
+
+                <li class="nav-item"><a class="nav-link" th:href="@{/eventos}">EVENTOS</a></li>
+
+                <li class="nav-item"><a class="nav-link" th:href="@{/reservaciones}">RESERVACIONES</a></li>
+
+                <li class="nav-item"><a class="nav-link active" th:href="@{/pedidos}">PEDIDOS</a></li>
+
+                <li class="nav-item"><a class="nav-link" th:href="@{/facturas}">VENTAS</a></li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item me-3 d-flex align-items-center">
+                    <span class="text-muted d-none d-lg-block">
+                        <i class="bi bi-person-circle me-1"></i> Admin
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link logout-link" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-right me-1"></i> CERRAR SESIÓN
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h2><i class="bi bi-basket-fill me-2" style="color: var(--primary-color);"></i>Pedidos</h2>
+
+    <!-- 🔍 BUSCADOR + PDF (MISMO DISEÑO DE USUARIOS) -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <form th:action="@{/pedidos/buscar}" method="get" class="d-flex" style="max-width: 350px;">
+            <input type="text" name="cliente" class="form-control me-2"
+                   placeholder="Buscar pedido...">
+            <button class="btn btn-primary" style="background-color: var(--primary-color); border:none;">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+
+        <!-- 🔴 PDF ROJO -->
+        <a class="btn-pdf" th:href="@{/pedidos/pdf}">
+            <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar PDF
+        </a>
+    </div>
+
+    <!-- Botón nuevo pedido (exactamente igual al estilo de usuarios) -->
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn-new" th:href="@{/pedidos/new}">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo Pedido
+        </a>
+    </div>
+
+    <div class="content-card p-0">
+        <table class="table mb-0">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Número Mesa</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th style="width: 120px;">Acciones</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="p : ${pedidos}">
+                <td th:text="${p.id}"></td>
+                <td th:text="${p.cliente}"></td>
+                <td th:text="${p.descripcion}"></td>
+                <td th:text="'$' + ${p.precio}"></td>
+
+                <td>
+                    <div class="action-btns-container">
+                        <a class="btn-icon-action btn-edit" th:href="@{|/pedidos/edit/${p.id}|}">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a class="btn-icon-action btn-delete"
+                           th:href="@{|/pedidos/delete/${p.id}|}"
+                           onclick="return confirm('¿Está seguro de eliminar este pedido?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+
+            <tr th:if="${pedidos == null or #lists.isEmpty(pedidos)}">
+                <td colspan="5" class="text-center text-muted py-4">
+                    No hay pedidos registrados.
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

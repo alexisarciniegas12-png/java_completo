@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente - Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
+
+    <style>
+        /* 🎨 PALETA DE COLORES (Amarillo/Pálido del Login) */
+        :root {
+            --primary-color: #FBC02D; /* Dorado/Amarillo Mostaza (Acento Principal) */
+            --primary-hover: #FFD54F; /* Amarillo más suave para hover */
+            --background-body: #F5F5F5; /* Fondo gris claro */
+            --text-color: #424242; /* Gris Oscuro para el texto principal */
+            --text-light: #757575; /* Gris medio para enlaces no activos */
+            --nav-bg: #FFFFFF; /* Fondo de la barra de navegación blanco */
+            --card-bg: #FFFFFF; /* Fondo de la tarjeta de contenido blanco */
+        }
+
+        body {
+            background-color: var(--background-body);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        /* --- Barra de Navegación Horizontal (Navbar) --- */
+        .navbar-custom {
+            background-color: var(--nav-bg);
+            border-bottom: 3px solid var(--primary-color);
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-brand {
+            color: var(--text-color) !important;
+            font-weight: 700;
+        }
+
+        .navbar-custom .nav-link {
+            color: var(--text-light);
+            font-weight: 500;
+            margin-right: 1.5rem;
+            padding-bottom: 0.8rem;
+            position: relative;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        /* === Estilos de Enlaces Activo/Hover === */
+        .navbar-custom .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .navbar-custom .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Línea inferior cálida para el elemento activo */
+        .navbar-custom .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        /* === Estilo de Cerrar Sesión (Rojo contraste) === */
+        .logout-link {
+            color: #E53935 !important;
+            font-weight: bold;
+            text-transform: uppercase !important;
+            transition: color 0.3s;
+        }
+        .logout-link:hover {
+            color: #C62828 !important;
+        }
+
+        /* --- Contenido Principal y Tarjeta --- */
+        .content-card {
+            background-color: var(--card-bg); /* Fondo blanco puro */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-color); /* Acento amarillo */
+        }
+
+        h2 {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        /* Contenedor principal con margen horizontal */
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid px-5">
+
+        <a class="navbar-brand me-5" th:href="@{/cliente/dashboard}">
+            PARRILLA EXPRESS
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavSimple" aria-controls="navbarNavSimple" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavSimple">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/cliente/dashboard}">
+                        INICIO
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reservaciones}">
+                        RESERVACIONES
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item me-3 d-flex align-items-center">
+                    <span class="text-muted d-none d-lg-block">
+                        <i class="bi bi-person-circle me-1"></i> Cliente
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link logout-link" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-right me-1"></i>CERRAR SESIÓN
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2><i class="bi bi-house-door me-2" style="color: var(--primary-color);"></i> Inicio de Cliente</h2>
+
+    <div class="content-card">
+        <p class="mb-0 fs-5">¡Bienvenido al área de cliente!</p>
+        <p class="text-muted small mt-1">Usa la barra de navegación para gestionar tus reservaciones.</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
